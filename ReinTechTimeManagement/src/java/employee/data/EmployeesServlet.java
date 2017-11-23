@@ -33,18 +33,19 @@ public class EmployeesServlet extends HttpServlet {
         
         // get current action
         String action = request.getParameter("action");
+        
         if (action == null) {
             action = "display_employees";  // default action
         }
         
         //verify user and launch proper landing page
         if (action.equals("verifyLogIn")) {            
-            int employeeID = request.parameter("employeeID");
-            int authLevel = request.parameter("authLevel");
-            String password = request.parameter("password");
-            
+            int employeeID = Integer.parseInt(request.getParameter("employeeID"));
+            int authLevel = Integer.parseInt(request.getParameter("authLevel"));
+            String password = request.getParameter("password");
             
         } 
+        
         getServletContext()
                 .getRequestDispatcher(url)
                 .forward(request, response);
