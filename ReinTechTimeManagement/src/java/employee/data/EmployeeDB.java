@@ -49,12 +49,11 @@ public class EmployeeDB {
                 {
                     Employee employee = new Employee();
                     employee.setEmployeeID(rs.getInt("EmloyyeeID"));
-                    employee.setAuthLevel(rs.getInt(query));
-                    employee.setPayRate(rs.getDouble(query));
+                    employee.setAuthLevel(rs.getInt("AuthLevel"));
+                    employee.setPayRate(rs.getDouble("PayRate"));
                     employee.setFirstName(rs.getString("FirstName"));
                     employee.setLastName(rs.getString("LastName"));
-                   //employee.setPassword(query);
-                   //employee.setStatus(query);
+                    employee.setStatus(rs.getString("Status"));
                     employeeList.add(employee);
                 }
             return employeeList ;
