@@ -13,6 +13,7 @@ import javax.servlet.*;
 //import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+import javax.swing.JOptionPane;
 /*import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -80,40 +81,48 @@ public class EmployeesServlet extends HttpServlet {
             request.setAttribute("employees", employees);            
         }
         
-        else if (action.equals("add_employee")) {
-            // get parameters from the request
-            int employeeID = Integer.parseInt(request.getParameter("employeeID"));
-            String firstName = request.getParameter("firstName");
-            String lastName = request.getParameter("lastName");
-            String password = request.getParameter("password");
-            int authLevel = Integer.parseInt(request.getParameter("authLevel"));
-            boolean status = Boolean.parseBoolean(request.getParameter("status"));
-            double payRate = Double.parseDouble(request.getParameter("payRate"));
-
-            // create new employee
-            Employee employee = new Employee(employeeID, firstName, lastName, password, authLevel, status, payRate); 
-            employee.setEmployeeID(employeeID);
-            employee.setFirstName(firstName);
-            employee.setLastName(lastName);
-            employee.setPassword(password);
-            employee.setAuthLevel(authLevel);
-            employee.setStatus(status);
-            employee.setPayRate(payRate);
-            EmployeeDB.insert(employee);
-
-            // get and set updated users
-            ArrayList<Employee> employees = EmployeeDB.selectEmployees();            
-            request.setAttribute("employees", employees);            
-        }
-        
         //verify user and launch proper landing page
-        else if (action.equals("verifyLogIn")) {            
-            int employeeID = Integer.parseInt(request.getParameter("employeeID"));
-            int authLevel = Integer.parseInt(request.getParameter("authLevel"));
-            String password = request.getParameter("password");
+        else if (action.equals("verifyLogIn")) {           
             
+            int employeeID = Integer.parseInt(request.getParameter("loginID"));
+            String password = request.getParameter("password");
+            int authLevel = 0;
+            
+            Employee verifyEmployee = new Employee();            
+            verifyEmployee = EmployeeDB.verifyLogin(employeeID, password);
+            
+            if(verifyEmployee != null)
+            {
+            authLevel = verifyEmployee.getAuthLevel();
+            }
+            else{
+                ;
+            }
+            switch (authLevel) {
+                case 1:
+                    url="/manager.jsp";
+                    break;
+                case 2:
+                    url="/employee.jsp";
+                    break;
+                default:
+                    url="/login.jsp";
+                    break;
+            }
+
         } 
 
+          else if (action.equals("changePassword")) {
+            // get parameters from the request
+            String password = request.getParameter("password");
+
+            // get and update user
+            Employee employee = (Employee) session.getAttribute("employee"); 
+            employee.setPassword(password);
+            EmployeeDB.update(employee);
+            
+        }
+        
         else if (action.equals("delete_employee")) {
             // get the user
             int employeeID = Integer.parseInt(request.getParameter("employeeID"));
@@ -142,7 +151,3 @@ public class EmployeesServlet extends HttpServlet {
     
         
 }
-
-
-
-            
