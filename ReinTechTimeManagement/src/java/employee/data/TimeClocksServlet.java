@@ -23,7 +23,7 @@ import javax.swing.JOptionPane;
  *
  * @author Admin
  */
-@WebServlet(name = "TimeClockServlet", urlPatterns = {"/timeclock"})
+@WebServlet(name = "TimeClocksServlet", urlPatterns = {"/timeclock"})
 
 public class TimeClocksServlet extends HttpServlet {
 
